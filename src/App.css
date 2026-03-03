@@ -1,0 +1,82 @@
+#root {
+  max-width: 1700px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+  background-color: #BAB5B5;
+  max-height: 1700px;
+}
+
+.header{
+  position: sticky;
+  top: 0;
+  background: #fff;
+  gap: 1rem;
+  padding: 0.5rem 0.5rem;
+  min-height: 50px;
+}
+.header-inner{
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+}
+.header-link{
+  color: #222;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+}
+.header-link:hover{
+  color: #0070f3;
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+
+.topbar {
+  background: #222;
+  color: #fff;
+  padding: 0.5rem 0;
+  font-size: 0.95rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+.topbar .topbar-inner{
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+.topbar a {
+  color: #fff;
+  text-decoration: none;
+  padding: 0.5rem 0.75rem;
+  opacity: 0.95;
+}
+.topbar a:hover{opacity:1}
+
+.topbar a:not(:last-child)::after{
+  content: "|";
+  color: #777;
+  margin-left: 0.6rem;
+  margin-right: 0.6rem;
+}
+.topbar a:hover {
+  opacity: 1;
+}
+
