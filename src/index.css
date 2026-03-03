@@ -5,7 +5,11 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
+<<<<<<< HEAD
   background-color: #BAB5B5;
+=======
+  background-color: #242424;
+>>>>>>> 579bcffa0f24b16cbd6a04bcd1df70b75b6abf46
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -30,12 +34,15 @@ body {
   min-height: 100vh;
 }
 
+<<<<<<< HEAD
 
 #root {
   width: 100%;
   background-color: #BAB5B5;
 }
 
+=======
+>>>>>>> 579bcffa0f24b16cbd6a04bcd1df70b75b6abf46
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
