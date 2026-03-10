@@ -1,0 +1,44 @@
+{
+  "name": "voltix-tech",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx react-scripts start",
+    "dev": "npx react-scripts start",
+    "api": "json-server --watch src/data/components.json --port 3001",
+    "build": "npx react-scripts build",
+    "test": "npx react-scripts test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mogzik/Voltix-tech.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^7.13.1"
+  },
+  "devDependencies": {
+    "json-server": "^1.0.0-beta.12",
+    "react-scripts": "^0.0.0"
+  },
+  "bugs": {
+    "url": "https://github.com/Mogzik/Voltix-tech/issues"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

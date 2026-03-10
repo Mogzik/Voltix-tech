@@ -18,7 +18,16 @@ export function CartProvider({ children }) {
  
   // Dodanie produktu do koszyka
   function addToCart(product) {
-    setCart((prev) => [...prev, { ...product, quantity: 1 }]);
+    setCart((prev) => {
+      const existing = prev.find(item => item.id === product.id);
+      if (existing) {
+        return prev.map(item =>
+          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+        );
+      } else {
+        return [...prev, { ...product, quantity: 1 }];
+      }
+    });
   }
  
   // Usunięcie produktu
@@ -28,11 +37,15 @@ export function CartProvider({ children }) {
  
   // Zmiana ilości produktu
   function updateQuantity(id, qty) {
-    setCart((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, quantity: qty } : item
-      )
-    );
+    if (qty <= 0) {
+      removeFromCart(id);
+    } else {
+      setCart((prev) =>
+        prev.map((item) =>
+          item.id === id ? { ...item, quantity: qty } : item
+        )
+      );
+    }
   }
  
   // Wyczyszczenie koszyka

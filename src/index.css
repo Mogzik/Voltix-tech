@@ -24,13 +24,12 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background-color: #BAB5B5;
 }
 
-
+/* make root take full viewport */
 #root {
   width: 100%;
   background-color: #BAB5B5;

@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { CartContext } from "../context/CartContext";
+import { Link } from "react-router-dom";
  
 export default function Cart() {
   const { cart, removeFromCart, updateQuantity } = useContext(CartContext);
@@ -36,11 +37,11 @@ export default function Cart() {
  
               <div>
                 <button onClick={() => updateQuantity(item.id, item.quantity - 1)}>
-                  
+                  -
                 </button>
                 <span style={{ margin: "0 10px" }}>{item.quantity}</span>
                 <button onClick={() => updateQuantity(item.id, item.quantity + 1)}>
-                  
+                  +
                 </button>
               </div>
  
@@ -49,6 +50,9 @@ export default function Cart() {
           ))}
  
           <h2>Łączna cena: {totalPrice} zł</h2>
+          <Link to="/checkout">
+            <button>Przejdź do płatności</button>
+          </Link>
         </>
       )}
     </div>

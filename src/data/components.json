@@ -1,0 +1,163 @@
+{
+  "components": [
+    {
+      "id": 1,
+      "name": "Intel Core i9-13900K",
+      "price": 3500,
+      "brand": "Intel",
+      "category": "Podzespoły",
+      "image": "https://www.intel.com/content/dam/www/central-libraries/us/en/images/2022-09/i9-13900k-product-photo.png",
+      "specs": {
+        "cores": 24,
+        "threads": 32,
+        "base_clock": "3.0 GHz",
+        "boost_clock": "5.8 GHz",
+        "tdp": "125 W",
+        "socket": "LGA 1700",
+        "cache": "36 MB"
+      }
+    },
+    {
+      "id": 2,
+      "name": "AMD Ryzen 9 7950X",
+      "price": 3200,
+      "brand": "AMD",
+      "category": "Podzespoły",
+      "image": "https://www.amd.com/system/files/styles/992px/private/2023-01/179133-ryzen-9-7950x-pib-left-facing-1260x709.png",
+      "specs": {
+        "cores": 16,
+        "threads": 32,
+        "base_clock": "4.5 GHz",
+        "boost_clock": "5.7 GHz",
+        "tdp": "170 W",
+        "socket": "AM5",
+        "cache": "80 MB"
+      }
+    },
+    {
+      "id": 3,
+      "name": "NVIDIA RTX 4090",
+      "price": 8000,
+      "brand": "NVIDIA",
+      "category": "Podzespoły",
+      "image": "https://www.nvidia.com/content/dam/en-zz/Solutions/geforce/ada/rtx-4090/images/overview/geforce-rtx-4090-gallery-1.jpg",
+      "specs": {
+        "vram": "24 GB GDDR6X",
+        "base_clock": "2235 MHz",
+        "boost_clock": "2520 MHz",
+        "tdp": "450 W",
+        "cuda_cores": 16384,
+        "memory_bus": "384-bit"
+      }
+    },
+    {
+      "id": 4,
+      "name": "Samsung 32GB DDR5 RAM",
+      "price": 400,
+      "brand": "Samsung",
+      "category": "Podzespoły",
+      "image": "https://images.samsung.com/is/image/samsung/p6pim/pl/memory-configurator/MZ-7LH1T0BW?fmt=png-alpha",
+      "specs": {
+        "capacity": "32 GB",
+        "type": "DDR5",
+        "speed": "5600 MHz",
+        "latency": "CL36",
+        "voltage": "1.1 V"
+      }
+    },
+    {
+      "id": 5,
+      "name": "ASUS ROG Strix Z690-E",
+      "price": 1500,
+      "brand": "ASUS",
+      "category": "Podzespoły",
+      "image": "https://www.asus.com/media/global/products/8g8q7z9qkz9q9z9q/P_setting_xxx_0_90_end_500.png",
+      "specs": {
+        "socket": "LGA 1700",
+        "chipset": "Intel Z690",
+        "ram_slots": 4,
+        "max_ram": "128 GB",
+        "wifi": "Wi-Fi 6E",
+        "bluetooth": "5.2"
+      }
+    },
+    {
+      "id": 6,
+      "name": "Samsung Odyssey G9 Monitor",
+      "price": 2500,
+      "brand": "Samsung",
+      "category": "Monitory",
+      "image": "https://images.samsung.com/is/image/samsung/p6pim/pl/ls49ag950nixxh/gallery/pl-odyssey-g9-ls49ag950nixxh-532135908?$650_519_PNG$",
+      "specs": {
+        "size": "49\"",
+        "resolution": "5120x1440",
+        "refresh_rate": "240 Hz",
+        "panel_type": "VA",
+        "hdr": "HDR1000",
+        "curvature": "1000R"
+      }
+    },
+    {
+      "id": 7,
+      "name": "Logitech MX Master 3S",
+      "price": 300,
+      "brand": "Logitech",
+      "category": "Akcesoria",
+      "image": "https://resource.logitech.com/w_692,c_limit,q_auto,f_auto,dpr_2.0/d_transparent.gif/content/dam/logitech/en/products/mice/mx-master-3s/gallery/mx-master-3s-mouse-top-view-grey.png?v=1",
+      "specs": {
+        "dpi": "8000",
+        "buttons": 7,
+        "battery_life": "70 days",
+        "connectivity": "Bluetooth, USB",
+        "weight": "141 g"
+      }
+    },
+    {
+      "id": 8,
+      "name": "Razer BlackWidow V3",
+      "price": 250,
+      "brand": "Razer",
+      "category": "Akcesoria",
+      "image": "https://assets.razerzone.com/eeimages/support/products/1534/1534_razer_blackwidow_v3.png",
+      "specs": {
+        "switch_type": "Mechanical (Green)",
+        "backlight": "RGB",
+        "connectivity": "USB",
+        "keycaps": "PBT",
+        "cable_length": "1.8 m"
+      }
+    },
+    {
+      "id": 9,
+      "name": "Apple iPhone 15 Pro",
+      "price": 4500,
+      "brand": "Apple",
+      "category": "Smartfony",
+      "image": "https://via.placeholder.com/400x300?text=No+Image",
+      "specs": {
+        "display": "6.1\" Super Retina XDR",
+        "processor": "A17 Pro",
+        "storage": "128 GB",
+        "camera": "48 MP",
+        "battery": "3274 mAh",
+        "os": "iOS 17"
+      }
+    },
+    {
+      "id": 10,
+      "name": "Sony PlayStation 5",
+      "price": 2500,
+      "brand": "Sony",
+      "category": "Konsolki",
+      "image": "https://gmedia.playstation.com/is/image/SIEPDC/ps5-product-thumbnail-01-en-14sep21?$facebook$",
+      "specs": {
+        "cpu": "AMD Zen 2 (8 cores)",
+        "gpu": "AMD RDNA 2",
+        "ram": "16 GB GDDR6",
+        "storage": "825 GB SSD",
+        "resolution": "4K UHD",
+        "hdr": "Yes"
+      }
+    }
+  ]
+}
