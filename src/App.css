@@ -27,6 +27,16 @@
   gap: 1rem;
   padding: 0.5rem 1rem;
 }
+.header-logo{
+  height: 56px;
+  width: auto;
+  display: inline-block;
+  margin-right: 0.75rem;
+}
+
+@media (max-width:520px){
+  .header-logo{height:40px;margin-right:0.5rem}
+}
 .header-link{
   color: #fff;
   text-decoration: none;
@@ -173,9 +183,15 @@
   border: none;
   width: 30px;
   height: 30px;
-  border-radius: 50%;
+  border-radius: 4px;
   cursor: pointer;
   box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  line-height: 1;
+  font-size: 16px;
 }
 .home .cat-arrow.left { left: -15px; }
 .home .cat-arrow.right { right: -15px; }
@@ -342,4 +358,18 @@
 
 .product-card .specs p {
   margin: 0.2rem 0;
+}
+
+/* Remove all border radius on the Products page */
+.products-page * {
+  border-radius: 0 !important;
+}
+
+/* Also ensure product grid and filter inputs have no rounding */
+.products-page .products-grid,
+.products-page .products-grid .product-card,
+.products-page .filters,
+.products-page .filters .filter-input,
+.products-page .filters .filter-select {
+  border-radius: 0 !important;
 }

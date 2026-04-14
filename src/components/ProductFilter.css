@@ -1,0 +1,68 @@
+.filters{
+  display:flex;
+  gap:0.75rem;
+  align-items:center;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin:1rem 0;
+}
+
+.filters input,
+.filters select{
+  padding:0.55rem 0.75rem;
+  border-radius:8px;
+  border:1px solid #d1d5db;
+  background:#fff;
+  font-size:0.95rem;
+  color:#111827;
+  transition: transform 120ms ease, box-shadow 120ms ease, opacity 120ms ease, filter 120ms ease;
+  will-change: transform, opacity;
+}
+
+.filters input{
+  min-width:220px;
+  box-shadow:0 1px 2px rgba(16,24,40,0.03);
+}
+
+.filters select{
+  min-width:150px;
+}
+
+@media (max-width:520px){
+  .filters input{min-width:140px}
+  .filters select{min-width:110px}
+}
+
+.filters input:hover,
+.filters select:hover{
+  transform: scale(0.98);
+  box-shadow: 0 2px 4px rgba(16,24,40,0.06);
+  opacity: 0.94;
+  filter: brightness(0.98);
+}
+
+/* Ensure only the actively hovered/focused element shows the hover styling */
+.filters > * {
+  position: relative;
+  z-index: 1;
+}
+
+.filters > *:hover,
+.filters > *:focus {
+  z-index: 3;
+}
+
+/* Reset non-active siblings while one element is hovered/focused */
+.filters:hover > *:not(:hover):not(:focus) {
+  transform: none;
+  opacity: 1;
+  filter: none;
+  box-shadow: none;
+}
+
+/* For keyboard focus accessibility keep same visual as hover */
+.filters > *:focus {
+  outline: none;
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 4px rgba(96,165,250,0.12);
+}

@@ -26,7 +26,7 @@ export default function Products() {
   });
  
   return (
-    <div>
+    <div className="products-page">
       <h1>Katalog produktów</h1>
       <ProductFilter setSearch={setSearch} setBrand={setBrand} setCategory={setCategoryFilter} />
       <div className="products-grid">

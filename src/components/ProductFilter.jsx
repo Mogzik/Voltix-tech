@@ -1,8 +1,10 @@
+import "./ProductFilter.css";
+
 export default function ProductFilter({ setSearch, setBrand, setCategory }) {
   return (
     <div className="filters">
-      <input placeholder="Szukaj..." onChange={e => setSearch(e.target.value)} />
-      <select onChange={e => setBrand(e.target.value)}>
+      <input type="search" className="filter-input" placeholder="Szukaj..." onChange={e => setSearch(e.target.value)} />
+      <select className="filter-select" onChange={e => setBrand(e.target.value)}>
         <option value="">Marka</option>
         <option value="Intel">Intel</option>
         <option value="AMD">AMD</option>
@@ -12,7 +14,7 @@ export default function ProductFilter({ setSearch, setBrand, setCategory }) {
         <option value="Apple">Apple</option>
         <option value="Sony">Sony</option>
       </select>
-      <select onChange={e => setCategory(e.target.value)}>
+      <select className="filter-select" onChange={e => setCategory(e.target.value)}>
         <option value="">Kategoria</option>
         <option value="Laptopy">Laptopy</option>
         <option value="Podzespoły">Podzespoły</option>
