@@ -18,6 +18,9 @@ export default function Products() {
       .catch(err => console.error('Error fetching products:', err));
   }, []);
  
+  const brands = Array.from(new Set(products.map(p => p.brand))).sort();
+  const categories = Array.from(new Set(products.map(p => p.category))).sort();
+ 
   const filtered = products.filter(p => {
     const matchesSearch = !search || p.name.toLowerCase().includes(search.toLowerCase());
     const matchesBrand = !brand || p.brand === brand;
@@ -25,13 +28,35 @@ export default function Products() {
     return matchesSearch && matchesBrand && matchesCategory;
   });
  
+  const groupedProducts = filtered.reduce((groups, product) => {
+    groups[product.category] = groups[product.category] || [];
+    groups[product.category].push(product);
+    return groups;
+  }, {});
+ 
   return (
     <div className="products-page">
       <h1>Katalog produktów</h1>
-      <ProductFilter setSearch={setSearch} setBrand={setBrand} setCategory={setCategoryFilter} />
-      <div className="products-grid">
-        {filtered.map(p => <ProductCard key={p.id} product={p} />)}
-      </div>
+      <ProductFilter
+        setSearch={setSearch}
+        setBrand={setBrand}
+        setCategory={setCategoryFilter}
+        brands={brands}
+        categories={categories}
+      />
+
+      {filtered.length === 0 ? (
+        <p className="no-results">Brak produktów spełniających kryteria.</p>
+      ) : (
+        Object.entries(groupedProducts).map(([category, items]) => (
+          <section key={category} className="category-group">
+            <h2>{category} ({items.length})</h2>
+            <div className="products-grid">
+              {items.map(p => <ProductCard key={p.id} product={p} />)}
+            </div>
+          </section>
+        ))
+      )}
     </div>
   );
 }
