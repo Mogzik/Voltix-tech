@@ -15,7 +15,7 @@ export default function Checkout() {
   return (
     <div>
       <h1>Płatność testowa</h1>
-      <input className="checkout" placeholder="Numer karty" />
+      <input className="checkout1" placeholder="Numer karty" />
       <button className="checkout" onClick={pay}>Zapłać</button>
     </div>
   );
