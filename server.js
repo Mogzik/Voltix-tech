@@ -1,4 +1,4 @@
-const Database = require('better-sqlite3');
+const mysql = require('mysql2/promise');
 const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
@@ -9,6 +9,13 @@ const port = 3001;
 
 app.use(cors());
 
+// MySQL connection settings (use env vars if available)
+const DB_HOST = process.env.DB_HOST || 'localhost';
+const DB_PORT = process.env.DB_PORT || 3306;
+const DB_USER = process.env.DB_USER || 'root';
+const DB_PASSWORD = process.env.DB_PASSWORD || '';
+const DB_NAME = process.env.DB_NAME || 'voltix';
+
 // Path to the JSON file
 const jsonFilePath = path.join(__dirname, 'src', 'data', 'components.json');
 
@@ -16,32 +23,6 @@ const jsonFilePath = path.join(__dirname, 'src', 'data', 'components.json');
 const data = JSON.parse(fs.readFileSync(jsonFilePath, 'utf8'));
 const components = data.components;
 
-// Create or open the database
-const db = new Database('components.db');
-
-// Drop and recreate table to update data
-db.exec('DROP TABLE IF EXISTS components');
-
-// Create the table
-db.exec(`
-  CREATE TABLE components (
-    id INTEGER PRIMARY KEY,
-    name TEXT,
-    price REAL,
-    brand TEXT,
-    category TEXT,
-    image TEXT,
-    specs TEXT
-  )
-`);
-
-// Prepare the insert statement
-const insert = db.prepare(`
-  INSERT OR REPLACE INTO components (id, name, price, brand, category, image, specs)
-  VALUES (?, ?, ?, ?, ?, ?, ?)
-`);
-
-// Insert the data
 const imageMap = {
   "Intel Core i9-13900K": "https://cdn.x-kom.pl/i/setup/images/prod/big/product-new-big,,2022/9/pr_2022_9_27_12_7_43_224_02.jpg",
   "AMD Ryzen 9 7950X": "https://cdn.x-kom.pl/i/setup/images/prod/big/product-new-big,,2023/1/pr_2023_1_25_12_54_39_334_03.jpg",
@@ -55,40 +36,98 @@ const imageMap = {
   "Sony PlayStation 5": "https://cdn.x-kom.pl/i/setup/images/prod/big/product-new-big,,2023/11/pr_2023_11_23_11_12_58_599_00.jpg"
 };
 
-components.forEach(component => {
-  const image = imageMap[component.name] || component.image;
-  insert.run(
-    component.id,
-    component.name,
-    component.price,
-    component.brand,
-    component.category,
-    image,
-    JSON.stringify(component.specs)
-  );
+let db;
+
+async function initializeDatabase() {
+  const connection = await mysql.createConnection({
+    host: DB_HOST,
+    port: DB_PORT,
+    user: DB_USER,
+    password: DB_PASSWORD
+  });
+
+  await connection.query(`CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\``);
+  await connection.changeUser({ database: DB_NAME });
+
+  await connection.query(`
+    CREATE TABLE IF NOT EXISTS components (
+      id INT PRIMARY KEY,
+      name VARCHAR(255),
+      price DECIMAL(10,2),
+      brand VARCHAR(100),
+      category VARCHAR(100),
+      image TEXT,
+      specs TEXT
+    )
+  `);
+
+  await connection.query('TRUNCATE TABLE components');
+
+  const insertSql = `
+    INSERT INTO components (id, name, price, brand, category, image, specs)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+    ON DUPLICATE KEY UPDATE
+      name = VALUES(name),
+      price = VALUES(price),
+      brand = VALUES(brand),
+      category = VALUES(category),
+      image = VALUES(image),
+      specs = VALUES(specs)
+  `;
+
+  for (const component of components) {
+    const image = imageMap[component.name] || component.image;
+    await connection.execute(insertSql, [
+      component.id,
+      component.name,
+      component.price,
+      component.brand,
+      component.category,
+      image,
+      JSON.stringify(component.specs)
+    ]);
+  }
+
+  return connection;
+}
+
+app.get('/components', async (req, res) => {
+  try {
+    const [rows] = await db.query('SELECT * FROM components');
+    const result = rows.map(row => ({
+      ...row,
+      specs: JSON.parse(row.specs)
+    }));
+    res.json(result);
+  } catch (error) {
+    console.error('MySQL query error:', error);
+    res.status(500).json({ error: 'Database error' });
+  }
 });
 
-// API endpoint
-app.get('/components', (req, res) => {
-  const rows = db.prepare('SELECT * FROM components').all();
-  // Parse specs back to JSON
-  const result = rows.map(row => ({
-    ...row,
-    specs: JSON.parse(row.specs)
-  }));
-  res.json(result);
+app.get('/', async (req, res) => {
+  try {
+    const [rows] = await db.query('SELECT * FROM components');
+    const result = rows.map(row => ({
+      ...row,
+      specs: JSON.parse(row.specs)
+    }));
+    res.json({ components: result });
+  } catch (error) {
+    console.error('MySQL query error:', error);
+    res.status(500).json({ error: 'Database error' });
+  }
 });
 
-app.get('/', (req, res) => {
-  const rows = db.prepare('SELECT * FROM components').all();
-  // Parse specs back to JSON
-  const result = rows.map(row => ({
-    ...row,
-    specs: JSON.parse(row.specs)
-  }));
-  res.json({ components: result });
-});
-
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-});
+initializeDatabase()
+  .then(connection => {
+    db = connection;
+    app.listen(port, () => {
+      console.log(`Server running on http://localhost:${port}`);
+      console.log(`Using MySQL database ${DB_NAME} at ${DB_HOST}:${DB_PORT}`);
+    });
+  })
+  .catch(error => {
+    console.error('Failed to initialize database:', error);
+    process.exit(1);
+  });

@@ -10,7 +10,6 @@ export default function Navbar() {
         <Link className="header-link" to="/products">Produkty</Link>
         <Link className="header-link" to="/cart">Koszyk</Link>
         <Link className="header-link" to="/checkout">Płatność</Link>
-        <Link className="header-link" to="/admin">Admin</Link>
       </div>
     </header>
   );
