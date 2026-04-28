@@ -19,6 +19,11 @@ body{
   padding: 0.5rem 0.5rem;
   min-height: 50px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  background: rgba(255, 255, 255, 0.2); /* musi być przezroczyste */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); /* Safari */
+  padding: 20px;
+  
 }
 .header-inner{
   max-width: 1280px;
