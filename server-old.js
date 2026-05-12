@@ -72,32 +72,6 @@ async function initializeDatabase() {
     );
   }
 
-  // Utwórz tabelę orders
-  await connection.query(`
-    CREATE TABLE IF NOT EXISTS orders (
-      id INT PRIMARY KEY AUTO_INCREMENT,
-      user_id INT NOT NULL,
-      total_price DECIMAL(10,2) NOT NULL,
-      status VARCHAR(50) DEFAULT 'completed',
-      card_last_four VARCHAR(4),
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY (user_id) REFERENCES users(id)
-    )
-  `);
-
-  // Utwórz tabelę order_items
-  await connection.query(`
-    CREATE TABLE IF NOT EXISTS order_items (
-      id INT PRIMARY KEY AUTO_INCREMENT,
-      order_id INT NOT NULL,
-      product_id INT,
-      product_name VARCHAR(255) NOT NULL,
-      product_price DECIMAL(10,2) NOT NULL,
-      quantity INT NOT NULL,
-      FOREIGN KEY (order_id) REFERENCES orders(id)
-    )
-  `);
-
   let existingCount = 0;
   try {
     const [countRows] = await connection.query('SELECT COUNT(*) AS count FROM components');
@@ -262,102 +236,6 @@ app.post('/login', async (req, res) => {
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({ error: 'Błąd serwera podczas logowania.' });
-  }
-});
-
-app.post('/payment', async (req, res) => {
-  try {
-    const { userId, cartItems, totalPrice, cardNumber } = req.body;
-    if (!userId || !cartItems || !totalPrice) {
-      return res.status(400).json({ error: 'Brakuje wymaganych danych.' });
-    }
-
-    // Utwórz zamówienie
-    const [orderResult] = await db.query(
-      'INSERT INTO orders (user_id, total_price, card_last_four) VALUES (?, ?, ?)',
-      [userId, totalPrice, cardNumber ? cardNumber.slice(-4) : 'xxxx']
-    );
-
-    const orderId = orderResult.insertId;
-
-    // Dodaj szczegóły produktów do zamówienia
-    for (const item of cartItems) {
-      await db.query(
-        'INSERT INTO order_items (order_id, product_id, product_name, product_price, quantity) VALUES (?, ?, ?, ?, ?)',
-        [orderId, item.id || null, item.name, item.price, item.quantity]
-      );
-    }
-
-    res.status(201).json({
-      message: 'Płatność zarejestrowana.',
-      orderId: orderId
-    });
-  } catch (error) {
-    console.error('Payment error:', error.message);
-    res.status(500).json({ error: `Błąd serwera: ${error.message}` });
-  }
-});
-
-app.get('/orders/:userId', async (req, res) => {
-  try {
-    const { userId } = req.params;
-    
-    // Pobierz zamówienia użytkownika
-    const [orders] = await db.query(
-      'SELECT * FROM orders WHERE user_id = ? ORDER BY created_at DESC',
-      [userId]
-    );
-
-    // Dla każdego zamówienia pobierz szczegóły produktów
-    for (let order of orders) {
-      const [items] = await db.query(
-        'SELECT * FROM order_items WHERE order_id = ?',
-        [order.id]
-      );
-      order.items = items;
-    }
-
-    res.json(orders);
-  } catch (error) {
-    console.error('Get orders error:', error.message);
-    res.status(500).json({ error: `Błąd serwera: ${error.message}` });
-  }
-});
-
-app.patch('/orders/:orderId', async (req, res) => {
-  try {
-    const { orderId } = req.params;
-    const { userId, items, totalPrice } = req.body;
-
-    if (!userId || !Array.isArray(items) || typeof totalPrice !== 'number') {
-      return res.status(400).json({ error: 'Brakuje wymaganych danych do aktualizacji zamówienia.' });
-    }
-
-    const [orderRows] = await db.query('SELECT * FROM orders WHERE id = ?', [orderId]);
-    if (orderRows.length === 0) {
-      return res.status(404).json({ error: 'Zamówienie nie istnieje.' });
-    }
-
-    const order = orderRows[0];
-    if (order.user_id !== Number(userId)) {
-      return res.status(403).json({ error: 'Brak dostępu do tego zamówienia.' });
-    }
-
-    await db.query('UPDATE orders SET total_price = ? WHERE id = ?', [totalPrice, orderId]);
-    await db.query('DELETE FROM order_items WHERE order_id = ?', [orderId]);
-
-    for (const item of items) {
-      if (item.quantity <= 0) continue;
-      await db.query(
-        'INSERT INTO order_items (order_id, product_id, product_name, product_price, quantity) VALUES (?, ?, ?, ?, ?)',
-        [orderId, item.product_id || null, item.product_name, item.product_price, item.quantity]
-      );
-    }
-
-    res.json({ message: 'Zamówienie zostało zaktualizowane.' });
-  } catch (error) {
-    console.error('Update order error:', error.message);
-    res.status(500).json({ error: `Błąd serwera: ${error.message}` });
   }
 });
 
