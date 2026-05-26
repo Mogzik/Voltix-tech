@@ -10,6 +10,7 @@ export default function Orders() {
   const [orders, setOrders] = useState([]);
   const [editingOrderId, setEditingOrderId] = useState(null);
   const [editedItems, setEditedItems] = useState([]);
+  const [deletingOrderId, setDeletingOrderId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -89,6 +90,41 @@ export default function Orders() {
     }
   }
 
+  async function deleteOrder(orderId) {
+    if (!window.confirm('Czy na pewno chcesz usunąć to zamówienie?')) return;
+    setDeletingOrderId(orderId);
+    try {
+      const response = await fetch(`${API_URL}/orders/${orderId}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: user.id })
+      });
+
+      // Try to parse JSON, but fall back to text for non-JSON responses
+      let data;
+      const text = await response.text();
+      try {
+        data = text ? JSON.parse(text) : {};
+      } catch (e) {
+        data = { message: text };
+      }
+
+      if (!response.ok) {
+        const msg = data.error || data.message || `Błąd serwera (${response.status})`;
+        setError(msg);
+        alert(msg);
+      } else {
+        await fetchOrders();
+      }
+    } catch (err) {
+      console.error('Error deleting order:', err);
+      setError('Błąd połączenia z serwerem. ' + (err.message || ''));
+      alert('Błąd połączenia z serwerem: ' + (err.message || ''));
+    } finally {
+      setDeletingOrderId(null);
+    }
+  }
+
   if (!user) {
     return (
       <div className="auth-page">
@@ -122,9 +158,19 @@ export default function Orders() {
               </div>
               <div>
                 {!editing ? (
-                  <button className="checkout" onClick={() => startEdit(order)}>
-                    Edytuj zamówienie
-                  </button>
+                  <>
+                    <button className="checkout" onClick={() => startEdit(order)}>
+                      Edytuj zamówienie
+                    </button>
+                    <button
+                      className="checkout-login-btn"
+                      onClick={() => deleteOrder(order.id)}
+                      disabled={deletingOrderId === order.id}
+                      style={{ marginLeft: '0.5rem' }}
+                    >
+                      {deletingOrderId === order.id ? 'Usuwanie...' : 'Usuń zamówienie'}
+                    </button>
+                  </>
                 ) : (
                   <>
                     <button className="checkout" onClick={() => saveOrder(order)} disabled={loading}>

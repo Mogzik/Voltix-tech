@@ -158,6 +158,134 @@
         "resolution": "4K UHD",
         "hdr": "Yes"
       }
+    },
+    {
+      "id": 11,
+      "name": "Sony WH-1000XM5 Headphones",
+      "price": 1299,
+      "brand": "Sony",
+      "category": "Słuchawki",
+      "image": "https://www.sony.com/image/2022/05/wh1000xm5-gallery-003.jpg",
+      "specs": {
+        "type": "Over-ear Wireless",
+        "driver_size": "40 mm",
+        "frequency": "4 Hz - 40 kHz",
+        "battery_life": "8 hours",
+        "charging_time": "3 hours",
+        "noise_cancellation": "Yes"
+      }
+    },
+    {
+      "id": 12,
+      "name": "Corsair H150i Elite Capellix",
+      "price": 899,
+      "brand": "Corsair",
+      "category": "Chłodzenie",
+      "image": "https://corsair.com/corsairus/en/Images/Product/Gallery/h150i-elite-capellix-gallery-2.png",
+      "specs": {
+        "type": "All-In-One Liquid Cooler",
+        "radiator_size": "360 mm",
+        "fans": 3,
+        "rgb_fans": "Yes",
+        "pump_rgb": "Yes",
+        "socket_compatibility": "LGA1700, AM4"
+      }
+    },
+    {
+      "id": 13,
+      "name": "Samsung 990 Pro SSD 4TB",
+      "price": 599,
+      "brand": "Samsung",
+      "category": "Dyski",
+      "image": "https://images.samsung.com/is/image/samsung/p6pim/pl/mz-v9p4t0bw/gallery/pl-ssd-990-pro-mz-v9p4t0bw-frontblack-311640606?$650_519_PNG$",
+      "specs": {
+        "capacity": "4 TB",
+        "interface": "PCIe 4.0 NVMe",
+        "read_speed": "7100 MB/s",
+        "write_speed": "6000 MB/s",
+        "form_factor": "M.2",
+        "warranty": "5 years"
+      }
+    },
+    {
+      "id": 14,
+      "name": "Corsair RM1000x Power Supply",
+      "price": 799,
+      "brand": "Corsair",
+      "category": "Zasilacze",
+      "image": "https://corsair.com/corsairus/en/Images/Product/Gallery/rm1000x-gold-gallery-1.png",
+      "specs": {
+        "wattage": "1000 W",
+        "efficiency": "Gold Certified",
+        "modular": "Full Modular",
+        "fan_size": "135 mm",
+        "warranty": "10 years",
+        "form_factor": "ATX"
+      }
+    },
+    {
+      "id": 15,
+      "name": "SteelSeries Arctis Nova 7",
+      "price": 449,
+      "brand": "SteelSeries",
+      "category": "Słuchawki",
+      "image": "https://images.hardwarezone.com/files/steelseries_arctis_nova_7.jpg",
+      "specs": {
+        "type": "Over-ear Wireless",
+        "driver_size": "40 mm",
+        "frequency": "20 Hz - 20 kHz",
+        "battery_life": "30 hours",
+        "charging_time": "2 hours",
+        "microphone": "Retractable"
+      }
+    },
+    {
+      "id": 16,
+      "name": "Noctua NH-D15 Cooler",
+      "price": 299,
+      "brand": "Noctua",
+      "category": "Chłodzenie",
+      "image": "https://www.noctua.at/media/image/9a/31/be/nhu-d15-chromax-black.png",
+      "specs": {
+        "type": "Air Cooler",
+        "socket_compatibility": "LGA1700, AM5",
+        "fan_count": 2,
+        "fan_size": "140 mm",
+        "heatsink_height": "165 mm",
+        "warranty": "6 years"
+      }
+    },
+    {
+      "id": 17,
+      "name": "Western Digital Black SN850X 2TB",
+      "price": 249,
+      "brand": "Western Digital",
+      "category": "Dyski",
+      "image": "https://images-na.ssl-images-amazon.com/images/I/61CJN8A7C7L._AC_SL1500_.jpg",
+      "specs": {
+        "capacity": "2 TB",
+        "interface": "PCIe 4.0 NVMe",
+        "read_speed": "7100 MB/s",
+        "write_speed": "5500 MB/s",
+        "form_factor": "M.2 2280",
+        "warranty": "5 years"
+      }
+    },
+    {
+      "id": 18,
+      "name": "EVGA SuperNOVA 850 G5",
+      "price": 549,
+      "brand": "EVGA",
+      "category": "Zasilacze",
+      "image": "https://images.evga.com/products/gallery/220-G5-0850-X1_gallery_1.jpg",
+      "specs": {
+        "wattage": "850 W",
+        "efficiency": "Gold Certified",
+        "modular": "Fully Modular",
+        "fan_size": "140 mm",
+        "warranty": "10 years",
+        "form_factor": "ATX"
+      }
     }
   ]
 }

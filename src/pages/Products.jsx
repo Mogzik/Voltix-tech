@@ -8,6 +8,9 @@ export default function Products() {
   const [search, setSearch] = useState("");
   const [brand, setBrand] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
+  const [sort, setSort] = useState('none');
   const location = useLocation();
   const locationCategory = location.state?.category;
  
@@ -25,10 +28,18 @@ export default function Products() {
     const matchesSearch = !search || p.name.toLowerCase().includes(search.toLowerCase());
     const matchesBrand = !brand || p.brand === brand;
     const matchesCategory = (!categoryFilter || p.category === categoryFilter) && (!locationCategory || p.category === locationCategory);
-    return matchesSearch && matchesBrand && matchesCategory;
+    const price = Number(p.price);
+    const matchesMin = minPrice === "" || isNaN(minPrice) ? true : price >= Number(minPrice);
+    const matchesMax = maxPrice === "" || isNaN(maxPrice) ? true : price <= Number(maxPrice);
+    return matchesSearch && matchesBrand && matchesCategory && matchesMin && matchesMax;
   });
  
-  const groupedProducts = filtered.reduce((groups, product) => {
+  // Apply sorting to filtered results
+  const sorted = [...filtered];
+  if (sort === 'price-asc') sorted.sort((a, b) => Number(a.price) - Number(b.price));
+  if (sort === 'price-desc') sorted.sort((a, b) => Number(b.price) - Number(a.price));
+
+  const groupedProducts = sorted.reduce((groups, product) => {
     groups[product.category] = groups[product.category] || [];
     groups[product.category].push(product);
     return groups;
@@ -41,6 +52,9 @@ export default function Products() {
         setSearch={setSearch}
         setBrand={setBrand}
         setCategory={setCategoryFilter}
+        setMinPrice={setMinPrice}
+        setMaxPrice={setMaxPrice}
+        setSort={setSort}
         brands={brands}
         categories={categories}
       />

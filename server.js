@@ -11,6 +11,12 @@ const port = 3001;
 app.use(cors());
 app.use(express.json());
 
+// Simple request logger to help debug routing issues
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`);
+  next();
+});
+
 // MySQL connection settings (use env vars if available)
 const DB_HOST = process.env.DB_HOST || 'localhost';
 const DB_PORT = process.env.DB_PORT || 3306;
@@ -380,6 +386,87 @@ app.patch('/orders/:orderId', async (req, res) => {
     res.json({ message: 'Zamówienie zostało zaktualizowane.' });
   } catch (error) {
     console.error('Update order error:', error.message);
+    res.status(500).json({ error: `Błąd serwera: ${error.message}` });
+  }
+});
+
+// User: Usuń własne zamówienie
+app.delete('/orders/:orderId', async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    // Accept userId from body or query to be resilient to clients that omit DELETE body
+    const userId = req.body?.userId || req.query?.userId;
+
+    // Debug logging to help trace requests from the client
+    console.log(`Delete order request received for id=${orderId}`, { userId });
+
+    if (!userId) {
+      return res.status(400).json({ error: 'Brakuje userId.' });
+    }
+
+    const [orderRows] = await db.query('SELECT * FROM orders WHERE id = ?', [orderId]);
+    if (orderRows.length === 0) {
+      return res.status(404).json({ error: 'Zamówienie nie istnieje.' });
+    }
+
+    const order = orderRows[0];
+    if (order.user_id !== Number(userId)) {
+      return res.status(403).json({ error: 'Brak dostępu do tego zamówienia.' });
+    }
+
+    await db.query('DELETE FROM order_items WHERE order_id = ?', [orderId]);
+    await db.query('DELETE FROM orders WHERE id = ?', [orderId]);
+
+    res.json({ message: 'Zamówienie zostało usunięte.' });
+  } catch (error) {
+    console.error('Delete order (user) error:', error.message);
+    res.status(500).json({ error: `Błąd serwera: ${error.message}` });
+  }
+});
+
+// Admin: Pobierz wszystkie zamówienia
+app.get('/admin/orders', async (req, res) => {
+  try {
+    const [orders] = await db.query(
+      'SELECT o.*, u.email FROM orders o JOIN users u ON o.user_id = u.id ORDER BY o.created_at DESC'
+    );
+
+    // Dla każdego zamówienia pobierz szczegóły produktów
+    for (let order of orders) {
+      const [items] = await db.query(
+        'SELECT * FROM order_items WHERE order_id = ?',
+        [order.id]
+      );
+      order.items = items;
+    }
+
+    res.json(orders);
+  } catch (error) {
+    console.error('Get all orders error:', error.message);
+    res.status(500).json({ error: `Błąd serwera: ${error.message}` });
+  }
+});
+
+// Admin: Usuń zamówienie
+app.delete('/admin/orders/:orderId', async (req, res) => {
+  try {
+    const { orderId } = req.params;
+
+    // Sprawdź czy zamówienie istnieje
+    const [orderRows] = await db.query('SELECT * FROM orders WHERE id = ?', [orderId]);
+    if (orderRows.length === 0) {
+      return res.status(404).json({ error: 'Zamówienie nie istnieje.' });
+    }
+
+    // Usuń elementy zamówienia
+    await db.query('DELETE FROM order_items WHERE order_id = ?', [orderId]);
+    
+    // Usuń zamówienie
+    await db.query('DELETE FROM orders WHERE id = ?', [orderId]);
+
+    res.json({ message: 'Zamówienie zostało usunięte.' });
+  } catch (error) {
+    console.error('Delete order error:', error.message);
     res.status(500).json({ error: `Błąd serwera: ${error.message}` });
   }
 });

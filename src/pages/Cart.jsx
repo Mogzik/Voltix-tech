@@ -15,7 +15,7 @@ export default function Cart() {
       <h1 style={{color:"white"}}>Koszyk</h1>
  
       {cart.length === 0 ? (
-        <p>Koszyk jest pusty</p>
+        <p style={{color:"white"}}>Koszyk jest pusty</p>
       ) : (
         <>
           {cart.map((item) => (

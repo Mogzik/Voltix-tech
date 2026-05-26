@@ -1,6 +1,6 @@
 import "./ProductFilter.css";
 
-export default function ProductFilter({ setSearch, setBrand, setCategory, brands = [], categories = [] }) {
+export default function ProductFilter({ setSearch, setBrand, setCategory, setMinPrice, setMaxPrice, setSort, brands = [], categories = [] }) {
   return (
     <div className="filters">
       <input type="search" className="filter-input" placeholder="Szukaj..." onChange={e => setSearch(e.target.value)} />
@@ -15,6 +15,34 @@ export default function ProductFilter({ setSearch, setBrand, setCategory, brands
         {categories.map(category => (
           <option key={category} value={category}>{category}</option>
         ))}
+      </select>
+
+      <input
+        type="number"
+        className="filter-input price-input"
+        placeholder="Min cena"
+        min="0"
+        onChange={e => {
+          const v = e.target.value;
+          setMinPrice(v === "" ? "" : Number(v));
+        }}
+      />
+
+      <input
+        type="number"
+        className="filter-input price-input"
+        placeholder="Max cena"
+        min="0"
+        onChange={e => {
+          const v = e.target.value;
+          setMaxPrice(v === "" ? "" : Number(v));
+        }}
+      />
+
+      <select className="filter-select" onChange={e => setSort && setSort(e.target.value)}>
+        <option value="none">Sortuj</option>
+        <option value="price-asc">Cena: najniższa → najwyższa</option>
+        <option value="price-desc">Cena: najwyższa → najniższa</option>
       </select>
     </div>
   );
