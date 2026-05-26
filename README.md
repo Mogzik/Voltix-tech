@@ -14,6 +14,7 @@ Włącz:
 
 Apache
 MySQL
+-- Dodaj baze danych
 
 ## 2. Otwórz terminal/CMD
 Przejdź do folderu z projektem:
