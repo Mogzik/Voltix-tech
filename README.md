@@ -27,3 +27,8 @@ Przejdź do folderu z projektem:
 
 npm run api
 
+## 4. Otwórz trzeci terminal (CMD)
+Przejdź do folderu z projektem:
+
+node server.js
+
