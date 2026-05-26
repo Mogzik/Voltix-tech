@@ -1,15 +1,71 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
+import PromotionDay from "../components/PromotionDay";
+
+const HITS_STORAGE_KEY = "hitsOfWeek";
 
 export default function Home() {
   const [products, setProducts] = useState([]);
+  const [hits, setHits] = useState([]);
 
   useEffect(() => {
     fetch("http://localhost:3001/components")
       .then(r => r.json())
-      .then(data => setProducts(data))
+      .then(data => {
+        setProducts(data);
+        loadOrRandomizeHits(data);
+      })
       .catch(console.error);
   }, []);
+
+  // Wczytaj hity z localStorage lub wylosuj nowe
+  const loadOrRandomizeHits = (productsList) => {
+    const stored = localStorage.getItem(HITS_STORAGE_KEY);
+    
+    if (stored) {
+      try {
+        const { hits, timestamp } = JSON.parse(stored);
+        const elapsed = Math.floor((Date.now() - timestamp) / 1000);
+        const remaining = Math.max(0, 10 * 60 - elapsed);
+        
+        // Jeśli minęło więcej niż 10 minut, wylosuj nowe
+        if (remaining === 0) {
+          randomizeHits(productsList);
+        } else {
+          setHits(hits);
+        }
+      } catch (error) {
+        console.error("Błąd wczytywania hitów:", error);
+        randomizeHits(productsList);
+      }
+    } else {
+      randomizeHits(productsList);
+    }
+  };
+
+  // Losuj 8 produktów do hitów
+  const randomizeHits = (productsList) => {
+    const shuffled = [...productsList].sort(() => Math.random() - 0.5);
+    const newHits = shuffled.slice(0, 8);
+    setHits(newHits);
+    
+    // Zapisz do localStorage
+    localStorage.setItem(HITS_STORAGE_KEY, JSON.stringify({
+      hits: newHits,
+      timestamp: Date.now()
+    }));
+  };
+
+  // Zmiana hitów co 10 minut
+  useEffect(() => {
+    if (products.length === 0) return;
+    
+    const interval = setInterval(() => {
+      randomizeHits(products);
+    }, 10 * 60 * 1000); // 10 minut
+
+    return () => clearInterval(interval);
+  }, [products]);
 
   const categories = Array.from(new Set(products.map(p => p.category)));
   const categoryImages = categories.reduce((acc, cat) => {
@@ -17,11 +73,6 @@ export default function Home() {
     acc[cat] = match ? match.image : `https://via.placeholder.com/200x150?text=${cat}`;
     return acc;
   }, {});
-
-  const featured = products.slice(0, 3);
-  const promotions = products.filter(p => p.price < 1000).slice(0, 3);
-  // hits of week could be highest price or arbitrary
-  const hits = products.slice(0, 4);
 
   return (
     <div className="home">
@@ -60,12 +111,7 @@ export default function Home() {
       </section>
 
       <section className="promo-and-hits">
-        <div className="promo-box">
-          <h3>un.Box</h3>
-          <p>Losuj i oszczędzaj – codziennie aż 3 produkty w super obniżce</p>
-          <p>Sprawdź, co możesz wylosować</p>
-          <img src="https://via.placeholder.com/200x150?text=Promocja" alt="promo" />
-        </div>
+        <PromotionDay />
         <div className="hits">
           <h2>Hity tygodnia</h2>
           <div className="hits-grid">
