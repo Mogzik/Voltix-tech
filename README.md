@@ -7,14 +7,14 @@ zainstalowane:
 - npm
 - XAMPP
 
-## Instrukcja uruchomienia
+### Instrukcja uruchomienia
 
 ## 1. Uruchom XAMPP
 Włącz:
 
 Apache
 MySQL
--- Dodaj baze danych
+ Dodaj baze danych
 
 ## 2. Otwórz terminal/CMD
 Przejdź do folderu z projektem:
