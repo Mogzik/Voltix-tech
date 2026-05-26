@@ -43,10 +43,10 @@ export default function Home() {
     }
   };
 
-  // Losuj 8 produktów do hitów
+  // Losuj 9 produktów do hitów
   const randomizeHits = (productsList) => {
     const shuffled = [...productsList].sort(() => Math.random() - 0.5);
-    const newHits = shuffled.slice(0, 8);
+    const newHits = shuffled.slice(0, 9);
     setHits(newHits);
     
     // Zapisz do localStorage

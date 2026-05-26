@@ -6,7 +6,7 @@ const API_URL = "http://localhost:3001";
 
 export default function Login() {
   const navigate = useNavigate();
-  const { setUser } = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -30,7 +30,7 @@ export default function Login() {
         return;
       }
 
-      setUser(data.user);
+      login(data.user);
       navigate("/");
     } catch (err) {
       setError("Nie można połączyć się z serwerem.");
