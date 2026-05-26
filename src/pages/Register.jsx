@@ -11,14 +11,34 @@ export default function Register() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
 
   async function handleSubmit(event) {
     event.preventDefault();
     setError("");
     setSuccess("");
     setLoading(true);
-
+    // Validate password meets policy: min 8 chars, at least one lowercase, one uppercase, one special char
+    const pwdPolicy = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{8,}$/;
+    if (!pwdPolicy.test(password)) {
+      setPasswordError('Hasło musi mieć min. 8 znaków, zawierać małą i dużą literę oraz co najmniej jeden znak specjalny.');
+      setError('Hasło nie spełnia wymagań.');
+      setLoading(false);
+      return;
+    }
+    setPasswordError("");
     try {
+      // Client-side pre-check if email already exists
+      const checkRes = await fetch(`${API_URL}/users?email=${encodeURIComponent(email)}`);
+      if (checkRes.ok) {
+        const checkData = await checkRes.json();
+        if (checkData.exists) {
+          setError('Konto z tym adresem e-mail już istnieje.');
+          setLoading(false);
+          return;
+        }
+      }
+
       const response = await fetch(`${API_URL}/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -28,6 +48,7 @@ export default function Register() {
       const data = await response.json();
       if (!response.ok) {
         setError(data.error || "Wystąpił błąd podczas rejestracji.");
+        setLoading(false);
         return;
       }
 
@@ -71,6 +92,7 @@ export default function Register() {
             required
           />
         </label>
+        {passwordError && <p className="auth-error">{passwordError}</p>}
         <button type="submit" disabled={loading}>
           {loading ? "Rejestracja..." : "Zarejestruj się"}
         </button>

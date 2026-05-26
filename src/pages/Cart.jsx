@@ -12,7 +12,7 @@ export default function Cart() {
  
   return (
     <div style={{ padding: "20px" }}>
-      <h1>Koszyk</h1>
+      <h1 style={{color:"white"}}>Koszyk</h1>
  
       {cart.length === 0 ? (
         <p>Koszyk jest pusty</p>
@@ -28,6 +28,7 @@ export default function Cart() {
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
+                color:"white",
               }}
             >
               <div>
@@ -49,7 +50,7 @@ export default function Cart() {
             </div>
           ))}
  
-          <h2>Łączna cena: {totalPrice} zł</h2>
+          <h2 style={{color:"white"}}>Łączna cena: {totalPrice} zł</h2>
           <Link to="/checkout">
             <button>Przejdź do płatności</button>
           </Link>

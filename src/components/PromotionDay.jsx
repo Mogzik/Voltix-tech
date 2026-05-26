@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import "../styles/PromotionDay.css";
+import { CartContext } from "../context/CartContext";
 
 const STORAGE_KEY = "promotionDay";
 
@@ -10,6 +11,7 @@ export default function PromotionDay() {
   const [priceReduction, setPriceReduction] = useState(0);
   const [quantity, setQuantity] = useState(5);
   const [allProducts, setAllProducts] = useState([]);
+  const { addToCart } = useContext(CartContext);
 
   // Pobierz produkty z API
   useEffect(() => {
@@ -121,9 +123,21 @@ export default function PromotionDay() {
         data.quantity = newQuantity;
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
       }
-      
-      // TODO: Dodaj produkt do koszyka w CartContext
-      console.log("Dodano produkt do koszyka. Pozostało sztuk:", newQuantity);
+      // Dodaj produkt do koszyka przez CartContext z ceną po rabacie
+      try {
+        const discountedPrice = product.price - priceReduction;
+        const promoProduct = {
+          ...product,
+          price: discountedPrice,
+          originalPrice: product.price,
+          discount,
+          priceReduction,
+        };
+        addToCart(promoProduct);
+        console.log("Dodano produkt do koszyka. Pozostało sztuk:", newQuantity);
+      } catch (err) {
+        console.error("Błąd dodawania do koszyka:", err);
+      }
     }
   };
 

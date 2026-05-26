@@ -408,6 +408,17 @@ background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);;
   font-weight: bold;
   margin-top: 0.3rem;
 }
+/* Category title styling for Products page */
+.category-group .category-title {
+  color: #fff;
+  font-size: 1.5rem;
+  margin: 1rem 0 0.5rem;
+}
+.category-group .category-title .count {
+  color: #fff;
+  font-weight: 700;
+  margin-left: 0.4rem;
+}
 .home .promotions {
   padding: 2rem;
   text-align: center;
@@ -479,6 +490,50 @@ input:focus{
 .product-card .specs p {
   margin: 0.2rem 0;
 }
+
+/* Modal for product specs */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  /* slightly translucent so backdrop-filter can blur the page behind */
+  background: rgba(0,0,0,0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.modal {
+  background: #fff;
+  color: #111;
+  padding: 1.25rem 1.5rem;
+  max-width: 720px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  position: relative;
+}
+.modal-close {
+  position: absolute;
+  right: 12px;
+  top: 8px;
+  background: transparent;
+  border: none;
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.modal h3 { margin-top: 0; }
+.specs-table { width: 100%; border-collapse: collapse; }
+.specs-table td { padding: 0.5rem 0.75rem; border-bottom: 1px solid rgba(0,0,0,0.06); }
+.spec-key { width: 35%; font-weight: 700; color: #333; }
+.spec-value { color: #444; }
+
+.product-card { position: relative; }
+
+/* Modal image */
+.modal-image-wrapper { text-align: center; margin-bottom: 0.75rem; }
+.modal-image { max-width: 100%; max-height: 220px; object-fit: contain; border-radius: 8px; }
 
 /* Remove all border radius on the Products page */
 .products-page * {

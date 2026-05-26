@@ -208,11 +208,34 @@ app.get('/components', async (req, res) => {
   }
 });
 
+// Endpoint to check users or check if an email exists
+app.get('/users', async (req, res) => {
+  try {
+    const { email } = req.query;
+    if (email) {
+      const [rows] = await db.query('SELECT id FROM users WHERE email = ?', [email]);
+      return res.json({ exists: rows.length > 0 });
+    }
+
+    const [rows] = await db.query('SELECT id, email, name FROM users');
+    res.json(rows);
+  } catch (error) {
+    console.error('Users query error:', error.message);
+    res.status(500).json({ error: 'Database error' });
+  }
+});
+
 app.post('/register', async (req, res) => {
   try {
     const { email, password, name } = req.body;
     if (!email || !password) {
       return res.status(400).json({ error: 'Email i hasło są wymagane.' });
+    }
+
+    // Enforce password policy on server as well
+    const pwdPolicy = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{8,}$/;
+    if (!pwdPolicy.test(password)) {
+      return res.status(400).json({ error: 'Hasło musi mieć min. 8 znaków, zawierać małą i dużą literę oraz co najmniej jeden znak specjalny.' });
     }
 
     const [existing] = await db.query('SELECT id FROM users WHERE email = ?', [email]);

@@ -36,7 +36,7 @@ export default function Products() {
  
   return (
     <div className="products-page">
-      <h1>Katalog produktów</h1>
+      <h1 style={{color:"white"}}>Katalog produktów</h1>
       <ProductFilter
         setSearch={setSearch}
         setBrand={setBrand}
@@ -50,7 +50,9 @@ export default function Products() {
       ) : (
         Object.entries(groupedProducts).map(([category, items]) => (
           <section key={category} className="category-group">
-            <h2>{category} ({items.length})</h2>
+            <h2 className={`category-title ${category === 'Podzespoły' ? 'podzespoly' : ''}`}>
+              {category} <span className="count">({items.length})</span>
+            </h2>
             <div className="products-grid">
               {items.map(p => <ProductCard key={p.id} product={p} />)}
             </div>
