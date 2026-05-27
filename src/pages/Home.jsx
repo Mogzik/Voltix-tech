@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import PromotionDay from "../components/PromotionDay";
+import { CartContext } from "../context/CartContext";
 
 const HITS_STORAGE_KEY = "hitsOfWeek";
 
 export default function Home() {
+  const { addToCart } = useContext(CartContext);
   const [products, setProducts] = useState([]);
   const [hits, setHits] = useState([]);
 
@@ -120,6 +122,7 @@ export default function Home() {
                 <img src={p.image} alt={p.name} />
                 <h4>{p.name}</h4>
                 <p className="price">{p.price} zł</p>
+                <button type="button" onClick={() => addToCart(p)}>Dodaj do koszyka</button>
               </div>
             ))}
           </div>

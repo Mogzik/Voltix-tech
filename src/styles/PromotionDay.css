@@ -14,13 +14,13 @@
 }
 
 .promo-header h2 {
-  color: #fff;
+  color: #000;
   font-size: 2rem;
   margin: 0 0 0.5rem 0;
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  background: none;
+  -webkit-background-clip: unset;
+  -webkit-text-fill-color: #000;
+  background-clip: unset;
 }
 
 .promo-subtitle {
@@ -83,7 +83,7 @@
 }
 
 .product-name {
-  color: #fff;
+  color: #000;
   font-size: 1.75rem;
   margin: 0;
   line-height: 1.2;

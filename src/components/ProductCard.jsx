@@ -14,6 +14,18 @@ export default function ProductCard({ product }) {
     return k.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
   }
 
+  const parseSpecs = (specs) => {
+    if (!specs) return null;
+    if (typeof specs === 'object') return specs;
+    try {
+      return JSON.parse(specs);
+    } catch {
+      return specs;
+    }
+  };
+
+  const specs = parseSpecs(product.specs);
+
   return (
     <>
       <div className="product-card" onClick={() => setShowModal(true)} style={{cursor: 'pointer'}}>
@@ -22,7 +34,7 @@ export default function ProductCard({ product }) {
         <p className="price">{product.price} zł</p>
         <div className="specs-container">
           <div className="specs">
-            {product.specs && Object.entries(product.specs).slice(0, 3).map(([key, value]) => (
+            {specs && Object.entries(specs).slice(0, 3).map(([key, value]) => (
               <p key={key}><strong>{formatKey(key)}:</strong> {value}</p>
             ))}
           </div>
@@ -39,10 +51,10 @@ export default function ProductCard({ product }) {
             </div>
             <h3>{product.name} — Specyfikacja</h3>
             <div className="modal-content">
-              {product.specs ? (
+              {specs ? (
                 <table className="specs-table">
                   <tbody>
-                    {Object.entries(product.specs).map(([key, value]) => (
+                    {Object.entries(specs).map(([key, value]) => (
                       <tr key={key}>
                         <td className="spec-key">{formatKey(key)}</td>
                         <td className="spec-value">{String(value)}</td>
