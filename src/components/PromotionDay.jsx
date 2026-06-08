@@ -13,7 +13,6 @@ export default function PromotionDay() {
   const [allProducts, setAllProducts] = useState([]);
   const { addToCart } = useContext(CartContext);
 
-  // Pobierz produkty z API
   useEffect(() => {
     fetch("http://localhost:3001/components")
       .then(r => r.json())
@@ -24,7 +23,6 @@ export default function PromotionDay() {
       .catch(console.error);
   }, []);
 
-  // Wczytaj produkt z localStorage lub wybierz nowy
   const loadOrSelectProduct = (products) => {
     const stored = localStorage.getItem(STORAGE_KEY);
     
@@ -34,7 +32,6 @@ export default function PromotionDay() {
         const elapsed = Math.floor((Date.now() - timestamp) / 1000);
         const remaining = Math.max(0, 600 - elapsed);
         
-        // Jeśli minęło więcej niż 10 minut, wybierz nowy produkt
         if (remaining === 0) {
           selectRandomProduct(products);
         } else {
@@ -53,13 +50,11 @@ export default function PromotionDay() {
       selectRandomProduct(products);
     }
   };
-
-  // Funkcja wyboru losowego produktu
   const selectRandomProduct = (products) => {
     if (products.length === 0) return;
     const randomProduct = products[Math.floor(Math.random() * products.length)];
-    const randomDiscount = Math.floor(Math.random() * 41) + 10; // 10-50%
-    const randomQuantity = Math.floor(Math.random() * 96) + 5; // 5-100 sztuk
+    const randomDiscount = Math.floor(Math.random() * 41) + 10;
+    const randomQuantity = Math.floor(Math.random() * 96) + 5;
     const reduction = Math.round((randomProduct.price * randomDiscount) / 100);
     
     console.log("Random quantity selected:", randomQuantity);
@@ -68,9 +63,8 @@ export default function PromotionDay() {
     setDiscount(randomDiscount);
     setPriceReduction(reduction);
     setQuantity(randomQuantity);
-    setTimeLeft(600); // 10 minut = 600 sekund
-    
-    // Zapisz do localStorage
+    setTimeLeft(600);
+
     localStorage.setItem(STORAGE_KEY, JSON.stringify({
       product: randomProduct,
       discount: randomDiscount,
@@ -80,18 +74,16 @@ export default function PromotionDay() {
     }));
   };
 
-  // Interwał 10 minut do zmiany produktu
   useEffect(() => {
     if (allProducts.length === 0) return;
     
     const interval = setInterval(() => {
       selectRandomProduct(allProducts);
-    }, 10 * 60 * 1000); // 10 minut
+    }, 10 * 60 * 1000);
 
     return () => clearInterval(interval);
   }, [allProducts]);
 
-  // Timer odliczający czas do następnego produktu
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft(t => {
@@ -103,27 +95,23 @@ export default function PromotionDay() {
     return () => clearInterval(timer);
   }, []);
 
-  // Formatowanie czasu mm:ss
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
   };
 
-  // Dodaj do koszyka i zmniejsz ilość
   const handleAddToCart = () => {
     if (quantity > 0) {
       const newQuantity = quantity - 1;
       setQuantity(newQuantity);
-      
-      // Aktualizuj localStorage
+
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
         const data = JSON.parse(stored);
         data.quantity = newQuantity;
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
       }
-      // Dodaj produkt do koszyka przez CartContext z ceną po rabacie
       try {
         const discountedPrice = product.price - priceReduction;
         const promoProduct = {
